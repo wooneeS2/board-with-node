@@ -26,6 +26,7 @@ app.get('/', async (req, res) => {
             page,
             search
         );
+        console.log(posts);
 
         // 리스트 페이지 렌더링
         res.render('home', {
