@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 export const BoardList = () => {
+    const navigate = useNavigate();
     return (
         <>
             <div className="flex justify-center font-bold text-4xl m-5 ">
@@ -36,7 +39,12 @@ export const BoardList = () => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td
+                            className="px-6 py-4 whitespace-nowrap"
+                            onClick={() => {
+                                navigate('/detail/fdafda');
+                            }}
+                        >
                             The Sliding Mr. Bones (Next Stop, Pottersville)
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

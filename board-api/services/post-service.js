@@ -1,3 +1,23 @@
+const { ObjectId } = require('mongodb');
+
+//db에서 필요한 필드들만 선택해서 가져오는 것
+const projectionOption = {
+    projection: {
+        password: 0,
+        'comments.password': 0,
+    },
+};
+
+//아이디에 해당되는 게시글을 가져오고
+//조회될때마다 hits=+1
+async function getDetailPost(collection, id) {
+    return await collection.findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $inc: { hits: 1 } },
+        projectionOption
+    );
+}
+
 async function writePost(collection, post) {
     post.hits = 0;
     post.createDt = new Date().toISOString();
@@ -18,7 +38,31 @@ async function list(collection, page, search) {
     return [posts, paginatorObj];
 }
 
+async function getPostByIdAndPassword(collection, { id, password }) {
+    return await collection.findOne(
+        { _id: ObjectId(id), password: password },
+        projectionOption
+    );
+}
+
+async function getPostById(collection, id) {
+    return await collection.findOne({ _id: ObjectId(id) }, projectionOption);
+}
+
+async function updatePost(collection, id, post) {
+    const toUpdatePost = {
+        $set: {
+            ...post,
+        },
+    };
+    return await collection.updateOne({ _id: ObjectId(id), toUpdatePost });
+}
+
 module.exports = {
     list,
     writePost,
+    getDetailPost,
+    getPostById,
+    getPostByIdAndPassword,
+    updatePost,
 };
